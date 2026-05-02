@@ -122,7 +122,7 @@ class Enemy {
         this.speedY = 0.6 * speedMultiplier;
         this.zigzagSpeed = 0.04 * speedMultiplier;
         this.zigzagAmplitude = 40;
-        this.shootChance = 0.003 * speedMultiplier;
+        this.shootChance = 0.001 * speedMultiplier;
     }
 
     update() {
