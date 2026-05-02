@@ -51,5 +51,4 @@ O projeto foi estruturado seguindo boas práticas de engenharia de software:
 - **DevOps Ready:** Repositório inicializado com Git, `.gitignore` robusto e publicado via GitHub.
 - **Segurança:** Revisão de código para garantir a ausência de chaves ou segredos expostos.
 
----
-Desenvolvido com ❤️ por João Bruno Luz.
+
