@@ -1,96 +1,56 @@
-// sprites.js - Matrizes de Pixel Art para renderização (1 = preenchido, 0 = vazio)
+// sprites.js - Gerenciador de Assets de alta fidelidade (Spritesheet)
 
-const SPRITES = {
-    player: {
-        color: '#00FFFF', // Ciano
-        data: [
-            [0,0,0,1,0,0,0],
-            [0,0,1,1,1,0,0],
-            [0,1,1,1,1,1,0],
-            [1,1,0,1,0,1,1],
-            [1,0,0,1,0,0,1]
-        ]
-    },
-    // Nível 1
-    hamburger: {
-        color: '#FFA500', // Laranja
-        data: [
-            [0,0,1,1,1,1,0,0],
-            [0,1,1,1,1,1,1,0],
-            [1,1,0,0,0,0,1,1], // semente
-            [0,1,1,1,1,1,1,0],
-            [1,1,1,1,1,1,1,1], // carne
-            [0,1,1,1,1,1,1,0]
-        ]
-    },
-    // Nível 2
-    cookie: {
-        color: '#DEB887', // Burlywood
-        data: [
-            [0,1,1,1,1,1,0],
-            [1,1,0,1,1,1,1],
-            [1,1,1,1,0,1,1],
-            [1,0,1,1,1,1,1],
-            [1,1,1,0,1,1,1],
-            [0,1,1,1,1,1,0]
-        ]
-    },
-    // Nível 3
-    iron: {
-        color: '#C0C0C0', // Prata
-        data: [
-            [0,0,1,1,1,0,0],
-            [0,0,1,0,1,0,0],
-            [0,1,1,1,1,1,0],
-            [1,1,1,1,1,1,1],
-            [1,1,1,1,1,1,1]
-        ]
-    },
-    // Nível 4
-    bowtie: {
-        color: '#FF00FF', // Magenta
-        data: [
-            [1,1,0,0,0,1,1],
-            [1,1,1,0,1,1,1],
-            [1,1,1,1,1,1,1],
-            [1,1,1,0,1,1,1],
-            [1,1,0,0,0,1,1]
-        ]
-    },
-    // Nível 5
-    diamond: {
-        color: '#00FF00', // Verde
-        data: [
-            [0,0,0,1,0,0,0],
-            [0,0,1,1,1,0,0],
-            [0,1,1,1,1,1,0],
-            [1,1,1,1,1,1,1],
-            [0,1,1,1,1,1,0],
-            [0,0,1,1,1,0,0],
-            [0,0,0,1,0,0,0]
-        ]
-    }
+const spriteSheet = new Image();
+spriteSheet.src = 'assets.png';
+
+let assetsLoaded = false;
+spriteSheet.onload = () => {
+    assetsLoaded = true;
+    console.log("Assets HD carregados!");
 };
 
-function drawSprite(ctx, spriteKey, x, y, scale = 4) {
-    const sprite = SPRITES[spriteKey];
-    if (!sprite) return;
+// Coordenadas estimadas (precisarão de ajustes finos)
+// Formato: [x, y, width, height]
+const SPRITE_MAP = {
+    player: [150, 450, 100, 100], // Exemplo: nave ciano
+    enemy_purple: [50, 50, 100, 100],
+    enemy_green: [200, 50, 120, 120],
+    enemy_crab: [50, 200, 80, 80],
+    enemy_squid: [200, 200, 80, 80],
+    projectile_player: [50, 600, 20, 40],
+    projectile_enemy: [100, 600, 30, 30],
+    explosion: [400, 600, 150, 150],
+    thruster: [150, 550, 40, 40],
+    icon_laser: [400, 50, 50, 50],
+    icon_rapid: [400, 120, 50, 50],
+    icon_energy: [400, 190, 50, 50]
+};
+
+// Mapeamento dos níveis para os novos sprites
+const LEVEL_SPRITE_KEYS = [
+    'enemy_purple',
+    'enemy_crab',
+    'enemy_squid',
+    'enemy_green',
+    'enemy_purple' // Repete ou alterna
+];
+
+function drawSpriteHD(ctx, spriteKey, destX, destY, destW, destH) {
+    if (!assetsLoaded) return;
     
-    ctx.fillStyle = sprite.color;
-    for (let row = 0; row < sprite.data.length; row++) {
-        for (let col = 0; col < sprite.data[row].length; col++) {
-            if (sprite.data[row][col] === 1) {
-                ctx.fillRect(x + (col * scale), y + (row * scale), scale, scale);
-            }
-        }
-    }
+    const coords = SPRITE_MAP[spriteKey];
+    if (!coords) return;
+
+    ctx.drawImage(
+        spriteSheet,
+        coords[0], coords[1], coords[2], coords[3], // Fonte (Crop)
+        destX, destY, destW, destH // Destino (Canvas)
+    );
 }
 
-function getSpriteDimensions(spriteKey, scale = 4) {
-    const sprite = SPRITES[spriteKey];
-    if (!sprite) return { width: 0, height: 0 };
-    return {
-        width: sprite.data[0].length * scale,
-        height: sprite.data.length * scale
-    };
+// Helper para obter proporção original
+function getSpriteAspectRatio(spriteKey) {
+    const coords = SPRITE_MAP[spriteKey];
+    if (!coords) return 1;
+    return coords[2] / coords[3];
 }
