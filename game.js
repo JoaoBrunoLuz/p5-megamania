@@ -96,11 +96,17 @@ class Player {
     }
 
     draw(ctx) {
-        // Thruster FX
-        const thrusterY = this.y + this.height - 10 + (Math.sin(Date.now() / 50) * 5);
-        drawSpriteHD(ctx, 'thruster', this.x + this.width / 2 - 15, thrusterY, 30, 30);
+        // Twin Thrusters FX (Turbinas Duplas)
+        const thrusterY = this.y + this.height - 15 + (Math.sin(Date.now() / 50) * 5);
+        drawSpriteHD(ctx, 'thruster', this.x + 5, thrusterY, 25, 25);
+        drawSpriteHD(ctx, 'thruster', this.x + this.width - 30, thrusterY, 25, 25);
         
+        // Brilho Neon na Nave
+        ctx.save();
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = '#00FFFF';
         drawSpriteHD(ctx, this.spriteKey, this.x, this.y, this.width, this.height);
+        ctx.restore();
     }
 }
 
@@ -116,7 +122,7 @@ class Enemy {
         this.speedY = 0.6 * speedMultiplier;
         this.zigzagSpeed = 0.04 * speedMultiplier;
         this.zigzagAmplitude = 40;
-        this.shootChance = 0.006 * speedMultiplier;
+        this.shootChance = 0.003 * speedMultiplier;
     }
 
     update() {
