@@ -306,7 +306,7 @@ class Game {
 
     update() {
         if (this.state === GAME_STATES.LOADING) {
-            if (assetsLoaded) this.state = GAME_STATES.MENU;
+            if (areAssetsReady()) this.state = GAME_STATES.MENU;
             return;
         }
 

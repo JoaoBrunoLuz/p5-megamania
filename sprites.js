@@ -1,18 +1,26 @@
-// sprites.js - Gerenciador de Assets de alta fidelidade (Spritesheet)
+// sprites.js - Gerenciador de Assets HD com suporte a imagens múltiplas
 
 const spriteSheet = new Image();
 spriteSheet.src = 'assets.png';
 
-let assetsLoaded = false;
-spriteSheet.onload = () => {
-    assetsLoaded = true;
-    console.log("Assets HD carregados!");
-};
+const playerImage = new Image();
+playerImage.src = 'player.png';
 
-// Coordenadas estimadas (precisarão de ajustes finos)
-// Formato: [x, y, width, height]
+let assetsLoaded = 0;
+const totalAssets = 2;
+
+function checkLoading() {
+    assetsLoaded++;
+    if (assetsLoaded >= totalAssets) {
+        console.log("Todos os Assets HD carregados!");
+    }
+}
+
+spriteSheet.onload = checkLoading;
+playerImage.onload = checkLoading;
+
 const SPRITE_MAP = {
-    player: [380, 780, 180, 180], // Tentativa de capturar a nave ciano detalhada no centro-baixo
+    player: null, // Especial: usa playerImage
     enemy_purple: [50, 50, 150, 150],
     enemy_green: [250, 50, 180, 180],
     enemy_crab: [50, 200, 80, 80],
@@ -26,31 +34,26 @@ const SPRITE_MAP = {
     icon_energy: [400, 190, 50, 50]
 };
 
-// Mapeamento dos níveis para os novos sprites
-const LEVEL_SPRITE_KEYS = [
-    'enemy_purple',
-    'enemy_crab',
-    'enemy_squid',
-    'enemy_green',
-    'enemy_purple' // Repete ou alterna
-];
+const LEVEL_SPRITE_KEYS = ['enemy_purple', 'enemy_crab', 'enemy_squid', 'enemy_green'];
 
 function drawSpriteHD(ctx, spriteKey, destX, destY, destW, destH) {
-    if (!assetsLoaded) return;
+    if (assetsLoaded < totalAssets) return;
     
+    if (spriteKey === 'player') {
+        ctx.drawImage(playerImage, destX, destY, destW, destH);
+        return;
+    }
+
     const coords = SPRITE_MAP[spriteKey];
     if (!coords) return;
 
     ctx.drawImage(
         spriteSheet,
-        coords[0], coords[1], coords[2], coords[3], // Fonte (Crop)
-        destX, destY, destW, destH // Destino (Canvas)
+        coords[0], coords[1], coords[2], coords[3],
+        destX, destY, destW, destH
     );
 }
 
-// Helper para obter proporção original
-function getSpriteAspectRatio(spriteKey) {
-    const coords = SPRITE_MAP[spriteKey];
-    if (!coords) return 1;
-    return coords[2] / coords[3];
+function areAssetsReady() {
+    return assetsLoaded >= totalAssets;
 }
