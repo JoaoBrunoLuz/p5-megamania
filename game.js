@@ -96,14 +96,9 @@ class Player {
     }
 
     draw(ctx) {
-        // Twin Thrusters FX (Turbinas Duplas)
-        const thrusterY = this.y + this.height - 15 + (Math.sin(Date.now() / 50) * 5);
-        drawSpriteHD(ctx, 'thruster', this.x + 5, thrusterY, 25, 25);
-        drawSpriteHD(ctx, 'thruster', this.x + this.width - 30, thrusterY, 25, 25);
-        
         // Brilho Neon na Nave
         ctx.save();
-        ctx.shadowBlur = 15;
+        ctx.shadowBlur = 20;
         ctx.shadowColor = '#00FFFF';
         drawSpriteHD(ctx, this.spriteKey, this.x, this.y, this.width, this.height);
         ctx.restore();

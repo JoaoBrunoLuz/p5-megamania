@@ -12,7 +12,7 @@ spriteSheet.onload = () => {
 // Coordenadas estimadas (precisarão de ajustes finos)
 // Formato: [x, y, width, height]
 const SPRITE_MAP = {
-    player: [200, 650, 200, 200], // Coordenada mais ampla para tentar capturar a nave no centro-baixo
+    player: [380, 780, 180, 180], // Tentativa de capturar a nave ciano detalhada no centro-baixo
     enemy_purple: [50, 50, 150, 150],
     enemy_green: [250, 50, 180, 180],
     enemy_crab: [50, 200, 80, 80],
